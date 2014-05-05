@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BootstrapValidator demo</title>
+
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../dist/css/bootstrapValidator.css"/>
+
+    <!-- Include the FontAwesome CSS if you want to use feedback icons provided by FontAwesome -->
+    <!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />-->
+
+    <script type="text/javascript" src="../vendor/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../dist/js/bootstrapValidator.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- form: -->
+            <section>
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="page-header">
+                        <h2>Sign up</h2>
+                    </div>
+
+                    <form id="defaultForm" method="post" class="form-horizontal" action="target.php">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Full name</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" name="firstName" placeholder="First name" />
+                            </div>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" name="lastName" placeholder="Last name" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Username</label>
+                            <div class="col-lg-5">
+                                <input type="text" class="form-control" name="username" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Email address</label>
+                            <div class="col-lg-5">
+                                <input type="text" class="form-control" name="email" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Password</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="password" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Retype password</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="confirmPassword" />
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label" id="captchaOperation"></label>
+                            <div class="col-lg-2">
+                                <input type="text" class="form-control" name="captcha" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-9 col-lg-offset-3">
+                                <button type="submit" class="btn btn-primary">Sign up</button>
+                                <button type="button" class="btn btn-info" id="validateBtn">Manual validate</button>
+                                <button type="button" class="btn btn-info" id="resetBtn">Reset form</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            <!-- :form -->
+        </div>
+    </div>
+
+    <form id="myform" action="/generate" method="post">
+        <div id="paragraphDIV" class="form-group">
+            <label align="left" style="float: left">Enter Number of Paragraphs Here</label>
+            <input type="text" autocomplete="off" class="form-control" name="paragraphs" for="paragraphs" placeholder="enter a number between 1-12"><br />
+
+        </div>
+        <br />
+        <label align="left" style="float: left">Enter Number of Words per Sentence</label>
+        <input type="radio" name="randomwords" value="random" checked>Random Or
+        <input id="wordinput" type="radio" name="randomwords" value="static">Static
+
+        <br />
+        <div id="staticwords" class="form-group"></div>
+        <br />
+
+        <label align="left" style="float: left">Enter Number of Sentences per Paragraph</label>
+        <input type="radio" name="randomsentence" value="random" checked>Random Or
+        <input type="radio" name="randomsentence" value="static">Static
+
+        <br />
+        <div id="staticsentence" class="form-group"></div>
+        <br />
+
+        <button id="submitButton" type="submit" class="btn btn-primary" disabled="disabled" value="Submit">Submit</button>
+    </form>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // Generate a simple captcha
+
+    var randomwords;
+    var new_div = $('<input id="newwordsinput" type="text" class="form-control" name="words" placeholder="enter a number between 5 and 20">').hide();
+    $('#staticwords').append(new_div);
+
+    var new_div1 = $('<input id="newsentenceinput" type="text" class="form-control" name="sentences" placeholder="enter a number between 10 and 25">').hide();
+    $('#staticsentence').append(new_div1);
+    function randomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    };
+
+    //word numbers
+    $("#myform input[name='randomwords']").click(function(){
+    if ($("input[name='randomwords']:checked").val() == "random") {
+        //alert('Random Words');
+        randomwords = true;
+        var bootstrapValidator = $('#myform').data('bootstrapValidator');
+        bootstrapValidator.enableFieldValidators('words', false);
+        new_div.slideUp();
+    }
+    else {
+        //alert('Static words');
+        randomwords = false;
+        var bootstrapValidator = $('#myform').data('bootstrapValidator');
+        bootstrapValidator.enableFieldValidators('words', true);
+        $('#newwordsinput').val('');
+        new_div.slideDown();
+
+
+    }
+    });
+//sentence numbers
+    $("#myform input[name='randomsentence']").click(function(){
+        if ($("input[name='randomsentence']:checked").val() == "random") {
+            new_div1.slideUp();
+            //alert('Random Words');
+            randomwords = true;
+            var bootstrapValidator = $('#myform').data('bootstrapValidator');
+            bootstrapValidator.enableFieldValidators('sentences', false);
+
+        }
+        else {
+            //alert('Static words');
+            randomwords = false;
+            var bootstrapValidator = $('#myform').data('bootstrapValidator');
+            bootstrapValidator.enableFieldValidators('sentences', true);
+            $('#newsentenceinput').val('');
+            new_div1.slideDown();
+
+        }
+    });
+
+    $('#captchaOperation').html([randomNumber(1, 100), '+', randomNumber(1, 200), '='].join(' '));
+
+    $('#defaultForm').bootstrapValidator({
+//        live: 'disabled',
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            firstName: {
+                validators: {
+                    notEmpty: {
+                        message: 'The first name is required and cannot be empty'
+                    }
+                }
+            },
+            lastName: {
+                validators: {
+                    notEmpty: {
+                        message: 'The last name is required and cannot be empty'
+                    }
+                }
+            },
+            username: {
+                message: 'The username is not valid',
+                validators: {
+                    notEmpty: {
+                        message: 'The username is required and cannot be empty'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 30,
+                        message: 'The username must be more than 6 and less than 30 characters long'
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_\.]+$/,
+                        message: 'The username can only consist of alphabetical, number, dot and underscore'
+                    },
+//                    remote: {
+//                        url: 'remote.php',
+//                        message: 'The username is not available'
+//                    },
+                    different: {
+                        field: 'password',
+                        message: 'The username and password cannot be the same as each other'
+                    }
+                }
+            },
+            email: {
+                validators: {
+                    emailAddress: {
+                        message: 'The input is not a valid email address'
+                    }
+                }
+            },
+            password: {
+                validators: {
+                    notEmpty: {
+                        message: 'The password is required and cannot be empty'
+                    },
+                    identical: {
+                        field: 'confirmPassword',
+                        message: 'The password and its confirm are not the same'
+                    },
+                    different: {
+                        field: 'username',
+                        message: 'The password cannot be the same as username'
+                    }
+                }
+            },
+            confirmPassword: {
+                validators: {
+                    notEmpty: {
+                        message: 'The confirm password is required and cannot be empty'
+                    },
+                    identical: {
+                        field: 'password',
+                        message: 'The password and its confirm are not the same'
+                    },
+                    different: {
+                        field: 'username',
+                        message: 'The password cannot be the same as username'
+                    }
+                }
+            },
+            birthday: {
+                validators: {
+                    date: {
+                        format: 'YYYY/MM/DD',
+                        message: 'The birthday is not valid'
+                    }
+                }
+            },
+            gender: {
+                validators: {
+                    notEmpty: {
+                        message: 'The gender is required'
+                    }
+                }
+            },
+            'languages[]': {
+                validators: {
+                    notEmpty: {
+                        message: 'Please specify at least one language you can speak'
+                    }
+                }
+            },
+            'programs[]': {
+                validators: {
+                    choice: {
+                        min: 2,
+                        max: 4,
+                        message: 'Please choose 2 - 4 programming languages you are good at'
+                    }
+                }
+            },
+            captcha: {
+                validators: {
+                    callback: {
+                        message: 'Wrong answer',
+                        callback: function(value, validator) {
+                            var items = $('#captchaOperation').html().split(' '), sum = parseInt(items[0]) + parseInt(items[2]);
+                            return value == sum;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    $('#myform').bootstrapValidator({
+       live: 'enabled',
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            paragraphs: {
+                message: 'Enter a number between 1 and 12',
+                validators: {
+                    notEmpty: {
+                        message: 'Must not be empty'
+                    },
+                    digits: {
+                        returnValue: true,
+                        message: 'Must be a number'
+                    },
+                   between: {
+                       min: 1,
+                       max: 12,
+                       message: 'Number must be between 1 and 12'
+                   }
+                }
+            },
+
+            words: {
+                message: 'Enter a number between 5 and 20',
+                enabled: false,
+                validators: {
+                    notEmpty: {
+                        message: 'Must not be empty'
+                    },
+                    digits: {
+                        returnValue: true,
+                        message: 'Must be a number'
+                    },
+                    between: {
+                        min: 5,
+                        max: 20,
+                        message: 'Number must be between 5 and 20'
+                    }
+                }
+            },
+            sentences: {
+                message: 'Enter a number between 10 and 25',
+                enabled: false,
+                validators: {
+                    notEmpty: {
+                        message: 'Must not be empty'
+                    },
+                    digits: {
+                        returnValue: true,
+                        message: 'Must be a number'
+                    },
+                    between: {
+                        min: 10,
+                        max: 25,
+                        message: 'Number must be between 10 and 25'
+                    }
+                }
+            }
+        }
+
+        });
+
+    $('input[name="shipping_to"]').on('change', function() {
+        var bootstrapValidator = $('#checkoutForm').data('bootstrapValidator'),
+                shipNewAddress     = ($(this).val() == 'new');
+
+
+        bootstrapValidator.enableFieldValidators('street', shipNewAddress)
+                .enableFieldValidators('city', shipNewAddress)
+                .enableFieldValidators('country', shipNewAddress)
+                .enableFieldValidators('state', shipNewAddress && $('select[name="country"]').val() == 'US');
+    });
+
+    // Validate the form manually
+    $('#validateBtn').click(function() {
+        $('#defaultForm').bootstrapValidator('validate');
+    });
+
+
+
+    $('#resetBtn').click(function() {
+        $('#defaultForm').data('bootstrapValidator').resetForm(true);
+    });
+});
+</script>
+</body>
+</html>

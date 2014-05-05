@@ -1,0 +1,86 @@
+<h1>This is your result</h1>
+<hr />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script>
+//document ready is a safety precaution that makes sure all of the HTML document has loaded before we try to add behavior.
+$(document).ready(function(){
+
+//Start event listener for click
+        var paragraphs = '';
+
+//Determine which of the check boxes is checked
+
+//Grab the paragraph number the user enters
+        var paragraph_number = <%= @paras %>
+
+
+words = <%= @newArray %>;
+//Vary the number of sentences in each paragraph randomly
+        //var sentence_number = 2;
+
+//Use a function that randomizes the contents of an array
+        function fisherYates(words) {
+            var i = words.length, j, tempi, tempj;
+            if ( i == 0 ) return false;
+            while ( --i ) {
+                j = Math.floor( Math.random() * ( i + 1 ) );
+                tempi = words[i];
+                tempj = words[j];
+                words[i] = tempj;
+                words[j] = tempi;
+            }
+            return words;
+        }
+function shuffle(arr){
+    return arr.sort(function(){
+        return Math.random() - 0.5;
+    })
+}
+//Start the first FOR loop that builds sentences from words
+        for ( var z = 0; z < paragraph_number; z++ ) {
+            var sentence_group = '';
+            var sentence_number = Math.floor((Math.random()*20)+10);
+
+
+//Start the second FOR loop that builds sentence groups from sentences
+            for ( var y = 0; y < sentence_number; y++ ) {
+
+//Start the third FOR loop that builds paragraphs from sentence groups
+                for ( var x = 0; x < words.length; x++ ) {
+
+//Create a variable for the randomized array of words
+                    var words_random = fisherYates(words);
+                    console.log(words_random);
+                    //var words_random1 = words_random1.slice (x, x+20);
+
+//Convert array to string with no commas or quotes, add period to end
+                    var sentence = words_random.toString().replace(/,/g, ' ') + '. ';
+
+//Capitalize first letter in string
+                    function capitalizeFirstLetter(string) {
+                        return string.charAt(0).toUpperCase() + string.slice(1);
+                    }
+                    var sentence_capped = capitalizeFirstLetter(sentence);
+                    console.log(sentence_capped);
+
+//End the first FOR loop that builds sentences from words
+                }
+                sentence_group += sentence_capped;
+//End the second FOR loop that builds sentence groups from sentences
+            }
+            paragraphs+='<p>' + sentence_group + '</p>';
+//End the third FOR loop that builds and spaces paragraphs from sentence groups
+        }
+
+        $("#print-paragraphs").empty().html(paragraphs);
+
+//Prevent form from actually submitting so page does not reload
+        return false;
+
+
+//End document ready
+});
+
+
+</script>
+<div id="print-paragraphs"></div>

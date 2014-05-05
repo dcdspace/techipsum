@@ -1,0 +1,81 @@
+<script>
+    $(document).ready(function () {
+        // Handler for .ready() called.
+        $('html, body').animate({
+            scrollTop: $('#result').offset().top
+        }, 'slow');
+    });
+</script>
+<nav class="navbar navbar-inverse" role="navigation" style="margin: 0px;">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <span class="navbar-brand">TechIpsum <span style="color: #d4d4d4; font-size: 13px; font-weight: bold">~ the random technology word generator pulled straight from Wikipedia</span></span>
+    </div>
+    <div class="navbar-right">
+      <span style="font-size: 14px" class="navbar-brand">Created by Dylan Diamond</span>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div align="center" id="main" class="jumbotron" style="border-bottom: 2px solid blue">
+  <div class="page-header">
+    <h1>Tech Ipsum <small>the real text for the web!</small></h1>
+    <hr />
+  </div>
+  <p>Fill out the form below to generate your text</p>
+  <form id="myform" action="/generate" method="post">
+    <div id="paragraphDIV" class="form-group">
+      <label align="left" style="float: left">Enter Number of Paragraphs Here</label>
+      <input type="text" autocomplete="off" class="form-control" name="paragraphs" for="paragraphs" placeholder="enter a number between 1-12"><br />
+
+    </div>
+    <div id="progressbar" class="progress progress-striped active" style="height: 25px">
+
+    </div>
+
+    <label align="left" style="float: left; margin-right: 10px">Select number of words per sentence</label>
+    <br />
+    <br />
+    <div align="left" style="float: left; margin-left: 30px" class="btn-group" data-toggle="buttons">
+
+      <label id="wordrand" class="btn btn-info" align="left" style="float: left"><input align="left" style="float: left" type="radio" name="randomwords" value="random" checked>Random</label>
+      <label id="wordstatic" class="btn btn-info" align="left" style="float: left"><input align="left" style="float: left" type="radio" name="randomwords" value="static">Static</label>
+    </div>
+    <br />
+    <br />
+
+    <br />
+    <div id="staticwords" class="form-group"></div>
+
+    <label align="left" style="float: left; margin-right: 10px">Select number of sentences per paragraph</label>
+    <br />
+    <br />
+    <div align="left" style="float: left; margin-left: 30px" class="btn-group" data-toggle="buttons">
+
+      <label id="sentencerand" class="btn btn-info" align="left" style="float: left"><input align="left" style="float: left" type="radio" name="randomsentence" value="random" checked>Random</label>
+      <label id="sentencestatic" class="btn btn-info" align="left" style="float: left"><input align="left" style="float: left" type="radio" name="randomsentence" value="static">Static</label>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div id="staticsentence" class="form-group"></div>
+    <br />
+
+    <button id="submitButton" type="submit" class="btn btn-primary" disabled="disabled" value="Submit">Submit</button>
+  </form>
+
+</div>
+
+<div id="result">
+  <span><h1>This is your result - <span style="font-size: 18px; color: darkred"><%= @parastat %>, <%= @wordstat %> words per sentence, <%= @sentencestat %> sentences per paragraph</span> </h1></span>
+  <hr />
+
+  <% @paragraphs.each do |paragraph| %>
+      <p>
+        <%= paragraph.map{ |i| '"%s"' % i }.join('').to_s.gsub('"', '') %>
+      </p>
+  <% end %>
+</div>

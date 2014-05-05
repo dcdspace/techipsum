@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Bootstrap 3 + Validation Plugin - jsFiddle demo by mapb_1990</title>
+
+    <script type='text/javascript' src='http://code.jquery.com/jquery-git2.js'></script>
+
+
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+    <script type='text/javascript' src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
+
+
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
+
+
+
+    <script type='text/javascript' src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+    <style type='text/css'>
+        body {
+            padding: 20px;
+        }
+    </style>
+
+    <script type='text/javascript'>//<![CDATA[
+    $(window).load(function(){
+        $(document).ready(function () {
+
+            $('#contact-form').validate({
+                rules: {
+                    name: {
+                        minlength: 2,
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    message: {
+                        minlength: 2,
+                        required: true
+                    }
+                },
+                highlight: function (element) {
+                    $(element).closest('.control-group').removeClass('success').addClass('error');
+                },
+                success: function (element) {
+                    element.text('OK!').addClass('valid')
+                            .closest('.control-group').removeClass('error').addClass('success');
+                }
+            });
+
+        });
+    });//]]>
+
+    </script>
+
+    <script type='text/javascript'>//<![CDATA[
+    $(window).load(function(){
+        $('form').validate({
+            rules: {
+                firstname: {
+                    minlength: 3,
+                    maxlength: 15,
+                    required: true
+                },
+                lastname: {
+                    minlength: 3,
+                    maxlength: 15,
+                    required: true
+                }
+            },
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+
+    });//]]>
+
+    </script>
+
+
+</head>
+<body>
+<form>
+    <div class="form-group">
+        <label class="control-label" for="firstname">Nome:</label>
+        <div class="input-group">
+            <span class="input-group-addon">$</span>
+            <input class="form-control" placeholder="Insira o seu nome próprio" name="firstname" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" for="lastname">Apelido:</label>
+        <div class="input-group">
+            <span class="input-group-addon">€</span>
+            <input class="form-control" placeholder="Insira o seu apelido" name="lastname" type="text" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<form method="POST" action="contact-form-submission.php" class="form-horizontal" id="contact-form">
+    <div class="control-group">
+        <label class="control-label" for="name">Name</label>
+        <div class="controls">
+            <input type="text" name="name" id="name" placeholder="Your name">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="email">Email Address</label>
+        <div class="controls">
+            <input type="text" name="email" id="email" placeholder="Your email address">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="subject">Subject</label>
+        <div class="controls">
+            <select id="subject" name="subject">
+                <option value="na" selected="">Choose One:</option>
+                <option value="service">Feedback</option>
+                <option value="suggestions">Suggestion</option>
+                <option value="support">Question</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="message">Message</label>
+        <div class="controls">
+            <textarea name="message" id="message" rows="8" class="span5" placeholder="The message you want to send to us."></textarea>
+        </div>
+    </div>
+    <div class="form-actions">
+        <input type="hidden" name="save" value="contact">
+        <button type="submit" class="btn btn-success">Submit Message</button>
+        <button type="reset" class="btn">Cancel</button>
+    </div>
+</form>
+</body>
+
+
+</html>
+

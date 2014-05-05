@@ -1,0 +1,27 @@
+body {
+    background-color: black;
+}
+
+#result {
+    margin: 10px;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+hr
+{ display: block; height: 1px;
+    border: 0; border-top: 1px solid #1613cc;
+    margin: 1em 0; padding: 0; }
+
+#result p {
+    text-indent: 3em;
+    margin: 10px;
+}
+
+div small.error {
+    color: #B94A48; /* color to match Bootstraps error class */
+}
+.success {
+    color: green;
+}
